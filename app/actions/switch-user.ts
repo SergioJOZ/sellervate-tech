@@ -17,8 +17,7 @@ import type { SwitchUserResult } from "@/features/identity/application/switch-us
 export async function switchUserAction(
   userKey: string,
 ): Promise<SwitchUserResult> {
-  const stubAuthEnabled = process.env.STUB_AUTH === "true";
-  if (!stubAuthEnabled) {
+  if (process.env.STUB_AUTH !== "true") {
     throw new Error(
       "switchUserAction is disabled: STUB_AUTH must be 'true' to use the seeded-user switcher.",
     );
@@ -34,7 +33,7 @@ export async function switchUserAction(
   const supabase = await createClient();
   const gateway = new SupabaseAuthGateway(supabase);
 
-  const result = await switchUser(gateway, userKey, password, stubAuthEnabled);
+  const result = await switchUser(gateway, userKey, password);
 
   if (result.ok) {
     redirect("/");

@@ -1,10 +1,11 @@
 "use client";
 
 import { useTransition } from "react";
-import { SEED_USERS } from "../domain/seed-users";
+import type { SwitcherOption } from "../domain/seed-users";
 import { switchUserAction, signOutAction } from "@/app/actions/switch-user";
 
 interface UserSwitcherProps {
+  users: SwitcherOption[];
   currentUserKey: string | null;
 }
 
@@ -13,11 +14,11 @@ const roleGroupLabel: Record<"team_lead" | "specialist", string> = {
   specialist: "Specialists",
 };
 
-export function UserSwitcher({ currentUserKey }: UserSwitcherProps) {
+export function UserSwitcher({ users, currentUserKey }: UserSwitcherProps) {
   const [isPending, startTransition] = useTransition();
 
-  const teamLeads = SEED_USERS.filter((u) => u.roleLabel === "team_lead");
-  const specialists = SEED_USERS.filter((u) => u.roleLabel === "specialist");
+  const teamLeads = users.filter((u) => u.roleLabel === "team_lead");
+  const specialists = users.filter((u) => u.roleLabel === "specialist");
 
   function handleSwitch(userKey: string) {
     startTransition(async () => {

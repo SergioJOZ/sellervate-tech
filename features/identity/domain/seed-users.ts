@@ -1,3 +1,5 @@
+import "server-only";
+
 export type SeedRole = "team_lead" | "specialist";
 
 export interface SeedUser {
@@ -10,12 +12,10 @@ export interface SeedUser {
 }
 
 /**
- * Emails and role labels only — no secret here. The password never lives in
- * this module: it comes from `process.env.SEED_USER_PASSWORD` at the point
- * of use in the Server Action (A9). Shared by the client-rendered switcher
- * UI and the server-only lookup in `findSeedUser`. Names/brands are the seed
- * decided in PR 3 (D1): Marta, Nuria (team leads), Dani, Leo, Sofía
- * (specialists).
+ * Server-only: emails stay on the server (A9). The password never lives in
+ * this module either; it comes from `process.env.SEED_USER_PASSWORD` inside
+ * the Server Action. The client switcher only receives `SwitcherOption`s.
+ * Names are the seed decided in PR 3 (D1).
  */
 export const SEED_USERS: readonly SeedUser[] = [
   {
@@ -49,6 +49,20 @@ export const SEED_USERS: readonly SeedUser[] = [
     roleLabel: "specialist",
   },
 ] as const;
+
+/** What the client-side switcher is allowed to see: no emails. */
+export type SwitcherOption = Pick<
+  SeedUser,
+  "key" | "displayName" | "roleLabel"
+>;
+
+export function listSwitcherOptions(): SwitcherOption[] {
+  return SEED_USERS.map(({ key, displayName, roleLabel }) => ({
+    key,
+    displayName,
+    roleLabel,
+  }));
+}
 
 export function findSeedUser(key: string): SeedUser | undefined {
   return SEED_USERS.find((u) => u.key === key);

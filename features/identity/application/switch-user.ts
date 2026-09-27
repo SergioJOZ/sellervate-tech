@@ -7,25 +7,19 @@ export type SwitchUserResult =
   | { ok: true }
   | {
       ok: false;
-      reason: "stub_auth_disabled" | "unknown_user" | "auth_failed";
+      reason: "unknown_user" | "auth_failed";
     };
 
 /**
- * Application use case for the stub-auth switcher (A9). Refuses to run
- * unless the caller confirms `STUB_AUTH === 'true'` — checked by the caller
- * (the Server Action) so the environment read stays a composition-root
- * concern, and re-checked here as a second guard.
+ * Application use case for the stub-auth switcher (A9). The `STUB_AUTH` gate
+ * is an environment concern, so it lives once in the Server Action
+ * (composition root), not here.
  */
 export async function switchUser(
   gateway: AuthGateway,
   userKey: string,
   password: string,
-  stubAuthEnabled: boolean,
 ): Promise<SwitchUserResult> {
-  if (!stubAuthEnabled) {
-    return { ok: false, reason: "stub_auth_disabled" };
-  }
-
   const seedUser = findSeedUser(userKey);
   if (!seedUser) {
     return { ok: false, reason: "unknown_user" };
