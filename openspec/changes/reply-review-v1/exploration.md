@@ -84,8 +84,8 @@ Brief line shaping the reviews model: "she records how good it was and what was 
 | # | Decision |
 |---|---|
 | 1 | Two roles only: `specialist`, `team_lead`. Memberships come from seed data; no admin role or UI. |
-| 2 | Role is per brand: `brand_memberships(user_id, brand_id, role)`, PK `(user_id, brand_id)`. |
-| 3 | Hybrid authorization: the Custom Access Token Hook adds memberships to the JWT for UI/navigation only. RLS always checks the table through a `security definer` helper (`is_brand_member(brand_id, role)`). A stale claim can produce a 403, never a leak. |
+| 2 | Role is global per user: `profiles.role` (`specialist` \| `team_lead`). `brand_memberships(user_id, brand_id)` (PK on the pair) only lists which brands a user works in. *Revised during spec review:* per-brand role was first chosen, then reversed — "team lead" is a job, not a per-brand capacity, and moving from a global role to a per-brand role later is an additive, lossless migration (add column, backfill from `profiles.role`), so the global role closes no door. |
+| 3 | Hybrid authorization: the Custom Access Token Hook adds the role and brand ids to the JWT for UI/navigation only. RLS always checks the tables through `security definer` helpers (`is_brand_member(brand_id)`, `is_team_lead()`). A stale claim can produce a 403, never a leak. |
 | 4 | A review records a score, multi-select failure tags and a free-text note. |
 | 5 | One review per reply: `UNIQUE(reviews.reply_id)`. |
 | 6 | Reviews are immutable once saved (no UPDATE policy). |

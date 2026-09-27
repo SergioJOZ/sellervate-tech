@@ -10,7 +10,7 @@ V1 reads the notes as a **reviewing problem**. A team lead needs a fast, consist
 
 ### In Scope
 - **Review queue + form (team lead)**: unreviewed replies from brands the user leads, newest `sent_at` first, with a brand filter. A review records a score from 1 to 5, multi-select failure tags and a note.
-- **Brand trend view (team lead)**: the weekly score trend, the most frequent failure tags, and `brand_actions` shown as markers on the trend, plus a minimal form to record a new action.
+- **Brand trend view (team lead)**: the weekly score trend, the failure tags of the last four weeks compared with the four before, a per-specialist breakdown for the brand, and `brand_actions` shown as markers on the trend, plus a minimal form to record a new action.
 - **Specialist self-view**: the specialist's own reviewed replies with their reviews (score, tags, note).
 - **Corner user switcher**: switches between seeded users with `signInWithPassword`. There is no login UI.
 - Schema, RLS, the Custom Access Token Hook, and seed data (3 brands, Marta leads 2, Nuria leads 1, specialists overlap brands).
@@ -28,7 +28,7 @@ V1 reads the notes as a **reviewing problem**. A team lead needs a fast, consist
 ## Capabilities
 
 ### New Capabilities
-- `access-control`: roles per brand, the JWT membership claims (UI only), and RLS through `is_brand_member(brand_id, role)`.
+- `access-control`: a global role per user plus brand memberships, the JWT claims (UI only), and RLS through `is_brand_member(brand_id)` and `is_team_lead()`.
 - `identity-switcher`: switching between seeded users in the corner, with a real Supabase session.
 - `reply-review`: the queue and the review form (score, tags, note), with one immutable review per reply.
 - `brand-trend`: the per-brand trend, recurring failure tags, and `brand_actions` markers.
@@ -40,7 +40,7 @@ V1 reads the notes as a **reviewing problem**. A team lead needs a fast, consist
 ## Approach
 
 This section applies decisions 1–11 from the exploration, unchanged.
-- Tables: `brands`, `profiles`, `brand_memberships(user_id, brand_id, role)` (PK on the pair), `replies` (+`source`, `external_id`), `reviews` (`UNIQUE(reply_id)`, `score smallint CHECK 1..5`, no UPDATE policy), `tags` (`brand_id` NULL means global), `review_tags`, `brand_actions`.
+- Tables: `brands`, `profiles` (+`role`), `brand_memberships(user_id, brand_id)` (PK on the pair), `replies` (+`source`, `external_id`), `reviews` (`UNIQUE(reply_id)`, `score smallint CHECK 1..5`, no UPDATE policy), `tags` (`brand_id` NULL means global), `review_tags`, `brand_actions`.
 - Authorization: the hook copies memberships into the JWT for navigation only. RLS always checks the table through a `security definer` helper, so a stale claim can cause a denial but never a leak.
 - Next.js App Router reads and writes through a server-side Supabase client that uses the user's session, so RLS always applies.
 
