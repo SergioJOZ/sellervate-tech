@@ -4,8 +4,7 @@ export default function Home() {
       <div className="bg-reading-surface rounded-box max-w-xl border border-base-300 p-8 text-center">
         <h1 className="text-2xl font-semibold text-primary">Reply Review</h1>
         <p className="font-serif text-reply mt-4 leading-relaxed">
-          Team leads review specialists&apos; customer replies, brand by
-          brand.
+          Team leads review specialists&apos; customer replies, brand by brand.
         </p>
         <p className="mt-6 text-sm">
           Example score:{" "}
