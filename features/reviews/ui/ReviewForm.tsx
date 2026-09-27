@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import { ScoreBadge } from "@/components/ui/ScoreBadge";
 import { TagChip } from "@/components/ui/TagChip";
 import { SCORE_VALUES, type Score } from "@/lib/score";
-import type { Tag } from "../ports/review-repository";
+import type { CreateBrandTagResult, Tag } from "../ports/review-repository";
 import { ConfirmSummary } from "./ConfirmSummary";
+import { NewTagDialog } from "./NewTagDialog";
 
 interface ReviewFormProps {
   replyId: string;
+  brandName: string;
   offerableTags: Tag[];
   nextQueueReplyId: string | null;
   brandFilter: string | null;
@@ -19,6 +21,11 @@ interface ReviewFormProps {
     note: string,
     tagIds: string[],
   ) => Promise<{ ok: boolean; reason?: string; message?: string }>;
+  createBrandTagAction: (
+    replyId: string,
+    label: string,
+    description: string,
+  ) => Promise<CreateBrandTagResult>;
 }
 
 /**
@@ -28,10 +35,12 @@ interface ReviewFormProps {
  */
 export function ReviewForm({
   replyId,
-  offerableTags,
+  brandName,
+  offerableTags: serverTags,
   nextQueueReplyId,
   brandFilter,
   submitReviewAction,
+  createBrandTagAction,
 }: ReviewFormProps) {
   const router = useRouter();
   const [score, setScore] = useState<Score | null>(null);
@@ -40,6 +49,21 @@ export function ReviewForm({
   const [confirming, setConfirming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  // Tags created in this form, shown (and selected) right away; the server
+  // list catches up on the action's refresh and duplicates are dropped.
+  const [createdTags, setCreatedTags] = useState<Tag[]>([]);
+
+  const offerableTags = [
+    ...serverTags,
+    ...createdTags.filter((tag) => !serverTags.some((t) => t.id === tag.id)),
+  ].sort((a, b) => a.label.localeCompare(b.label));
+
+  const handleTagCreated = (tag: Tag) => {
+    setCreatedTags((current) => [...current, tag]);
+    setSelectedTagIds((current) =>
+      current.includes(tag.id) ? current : [...current, tag.id],
+    );
+  };
 
   const toggleTag = (tagId: string) => {
     setSelectedTagIds((current) =>
@@ -118,21 +142,26 @@ export function ReviewForm({
         ) : null}
       </div>
 
-      {offerableTags.length > 0 ? (
-        <div>
-          <p className="mb-2 text-sm font-medium">Tags</p>
-          <div className="flex flex-wrap gap-2">
-            {offerableTags.map((tag) => (
-              <TagChip
-                key={tag.id}
-                label={tag.label}
-                selected={selectedTagIds.includes(tag.id)}
-                onClick={() => toggleTag(tag.id)}
-              />
-            ))}
-          </div>
+      <div>
+        <p className="mb-2 text-sm font-medium">Tags</p>
+        <div className="flex flex-wrap items-center gap-2">
+          {offerableTags.map((tag) => (
+            <TagChip
+              key={tag.id}
+              label={tag.label}
+              selected={selectedTagIds.includes(tag.id)}
+              onClick={() => toggleTag(tag.id)}
+            />
+          ))}
+          <NewTagDialog
+            brandName={brandName}
+            createTag={(label, description) =>
+              createBrandTagAction(replyId, label, description)
+            }
+            onCreated={handleTagCreated}
+          />
         </div>
-      ) : null}
+      </div>
 
       <div>
         <label className="mb-2 block text-sm font-medium" htmlFor="note">
