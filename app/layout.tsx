@@ -62,29 +62,44 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <header className="navbar bg-base-200 border-b border-base-300 px-4">
-          <div className="flex-1">
+          <div className="flex flex-1 items-center gap-6">
             <Link href="/" className="text-lg font-semibold text-primary">
               Reply Review
             </Link>
             {claims.userRole === "team_lead" && (
-              <nav className="ml-6 flex items-center gap-4 text-sm">
-                <Link href="/queue" className="link link-hover">
-                  Queue
+              <nav aria-label="Main" className="flex items-center gap-1">
+                <Link href="/queue" className="btn btn-ghost btn-sm">
+                  Review replies
                 </Link>
-                {navBrands.map((brand) => (
-                  <Link
-                    key={brand.id}
-                    href={`/brands/${brand.id}`}
-                    className="link link-hover"
-                  >
-                    {brand.name}
-                  </Link>
-                ))}
+                {navBrands.length > 0 && (
+                  // dropdown-hover also opens on focus, so it works with a
+                  // keyboard and on touch, not only on mouse hover.
+                  <div className="dropdown dropdown-hover">
+                    <div
+                      tabIndex={0}
+                      role="button"
+                      className="btn btn-ghost btn-sm"
+                    >
+                      Statistics
+                      <span aria-hidden="true">▾</span>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="menu dropdown-content bg-base-200 rounded-box z-10 w-52 p-2 shadow-sm"
+                    >
+                      {navBrands.map((brand) => (
+                        <li key={brand.id}>
+                          <Link href={`/brands/${brand.id}`}>{brand.name}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </nav>
             )}
             {claims.userRole === "specialist" && (
-              <nav className="ml-6 flex items-center gap-4 text-sm">
-                <Link href="/feedback" className="link link-hover">
+              <nav aria-label="Main" className="flex items-center gap-1">
+                <Link href="/feedback" className="btn btn-ghost btn-sm">
                   My feedback
                 </Link>
               </nav>
