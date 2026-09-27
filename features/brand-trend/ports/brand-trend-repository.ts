@@ -30,6 +30,31 @@ export interface BrandActionEntry {
   takenAt: string; // date
   note: string;
   tagLabel: string | null;
+  authorName: string;
+}
+
+/** Average score and reviewed-reply count over one window. */
+export interface ScoreWindow {
+  avgScore: number | null; // null when the window has no reviewed replies
+  n: number;
+}
+
+/** Last 4 weeks vs the 4 weeks before, by reply `sent_at`. */
+export interface ScoreWindows {
+  last4Weeks: ScoreWindow;
+  previous4Weeks: ScoreWindow;
+}
+
+export interface ImpactWindow extends ScoreWindow {
+  tagCount: number | null; // null when the action targets no tag
+}
+
+/** 4 weeks before vs 4 weeks after one brand action (`brand_action_impact`). */
+export interface ActionImpact {
+  actionId: string;
+  before: ImpactWindow;
+  after: ImpactWindow;
+  weeksAfter: number; // whole weeks of data after the action, capped at 4
 }
 
 export interface TagOption {
@@ -57,9 +82,11 @@ export interface RecordActionInput {
 export interface BrandTrendRepository {
   getBrand(brandId: string): Promise<BrandSummary | null>;
   getWeeklyScores(brandId: string): Promise<WeeklyScorePoint[]>;
+  getScoreWindows(brandId: string): Promise<ScoreWindows>;
   getTagCounts(brandId: string): Promise<TagCount[]>;
   getSpecialistStats(brandId: string): Promise<SpecialistStat[]>;
   getActions(brandId: string): Promise<BrandActionEntry[]>;
+  getActionImpacts(brandId: string): Promise<ActionImpact[]>;
   getTagOptions(brandId: string): Promise<TagOption[]>;
   recordAction(input: RecordActionInput): Promise<RecordActionResult>;
 }

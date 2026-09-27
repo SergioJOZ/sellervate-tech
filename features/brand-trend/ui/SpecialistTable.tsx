@@ -24,9 +24,9 @@ export function SpecialistTable({ specialistStats }: SpecialistTableProps) {
       <thead>
         <tr>
           <th>Specialist</th>
-          <th>Average score</th>
-          <th>Reviews (n)</th>
-          <th>Top failure tag</th>
+          <th>Average</th>
+          <th>Reviewed replies</th>
+          <th>Most frequent issue</th>
         </tr>
       </thead>
       <tbody>

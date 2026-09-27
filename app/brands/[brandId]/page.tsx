@@ -5,6 +5,8 @@ import { TrendChart } from "@/features/brand-trend/ui/TrendChart";
 import { TagComparison } from "@/features/brand-trend/ui/TagComparison";
 import { SpecialistTable } from "@/features/brand-trend/ui/SpecialistTable";
 import { ActionForm } from "@/features/brand-trend/ui/ActionForm";
+import { ActionImpactList } from "@/features/brand-trend/ui/ActionImpactList";
+import { SummaryTiles } from "@/features/brand-trend/ui/SummaryTiles";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { recordBrandActionForBrand } from "./actions";
 
@@ -30,10 +32,11 @@ export default async function BrandTrendPage({
 
   const {
     brand,
+    summary,
     weeklyScores,
+    actions,
     tagCounts,
     specialistStats,
-    actions,
     tagOptions,
   } = result.data;
 
@@ -41,8 +44,9 @@ export default async function BrandTrendPage({
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-8 p-8">
-      <header>
+      <header className="flex flex-col gap-4">
         <h1 className="text-2xl font-semibold text-primary">{brand.name}</h1>
+        <SummaryTiles summary={summary} />
       </header>
 
       <section aria-labelledby="trend-heading" className="flex flex-col gap-3">
@@ -59,9 +63,27 @@ export default async function BrandTrendPage({
         )}
       </section>
 
+      <section
+        aria-labelledby="changes-heading"
+        className="flex flex-col gap-3"
+      >
+        <h2 id="changes-heading" className="text-lg font-semibold">
+          What we changed
+        </h2>
+        <ActionImpactList actions={actions} />
+        <details className="group">
+          <summary className="btn btn-outline btn-sm w-fit">
+            Record an action
+          </summary>
+          <div className="rounded-box mt-3 border border-base-300 bg-base-200 p-4">
+            <ActionForm action={boundAction} tagOptions={tagOptions} />
+          </div>
+        </details>
+      </section>
+
       <section aria-labelledby="tags-heading" className="flex flex-col gap-3">
         <h2 id="tags-heading" className="text-lg font-semibold">
-          Recurring failures
+          What we keep getting wrong
         </h2>
         <TagComparison tagCounts={tagCounts} />
       </section>
@@ -71,16 +93,9 @@ export default async function BrandTrendPage({
         className="flex flex-col gap-3"
       >
         <h2 id="specialists-heading" className="text-lg font-semibold">
-          Per-specialist breakdown (last 4 weeks)
+          By specialist (last 4 weeks)
         </h2>
         <SpecialistTable specialistStats={specialistStats} />
-      </section>
-
-      <section aria-labelledby="action-heading" className="flex flex-col gap-3">
-        <h2 id="action-heading" className="text-lg font-semibold">
-          Record an action
-        </h2>
-        <ActionForm action={boundAction} tagOptions={tagOptions} />
       </section>
     </div>
   );

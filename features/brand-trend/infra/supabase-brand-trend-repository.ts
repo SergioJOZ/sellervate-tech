@@ -2,11 +2,13 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
+  ActionImpact,
   BrandActionEntry,
   BrandSummary,
   BrandTrendRepository,
   RecordActionInput,
   RecordActionResult,
+  ScoreWindows,
   SpecialistStat,
   TagCount,
   TagOption,
@@ -43,6 +45,27 @@ export class SupabaseBrandTrendRepository implements BrandTrendRepository {
       avgScore: Number(row.avg_score),
       n: Number(row.n),
     }));
+  }
+
+  async getScoreWindows(brandId: string): Promise<ScoreWindows> {
+    const { data } = await this.supabase
+      .from("brand_score_windows")
+      .select(
+        "last_4_weeks_avg_score, last_4_weeks_n, previous_4_weeks_avg_score, previous_4_weeks_n",
+      )
+      .eq("brand_id", brandId)
+      .maybeSingle();
+
+    return {
+      last4Weeks: {
+        avgScore: toNumberOrNull(data?.last_4_weeks_avg_score),
+        n: Number(data?.last_4_weeks_n ?? 0),
+      },
+      previous4Weeks: {
+        avgScore: toNumberOrNull(data?.previous_4_weeks_avg_score),
+        n: Number(data?.previous_4_weeks_n ?? 0),
+      },
+    };
   }
 
   async getTagCounts(brandId: string): Promise<TagCount[]> {
@@ -111,15 +134,45 @@ export class SupabaseBrandTrendRepository implements BrandTrendRepository {
   async getActions(brandId: string): Promise<BrandActionEntry[]> {
     const { data } = await this.supabase
       .from("brand_actions")
-      .select("id, taken_at, note, tag:tags(label)")
+      .select(
+        "id, taken_at, note, tag:tags(label), author:profiles(display_name)",
+      )
       .eq("brand_id", brandId)
-      .order("taken_at", { ascending: true });
+      .order("taken_at", { ascending: true })
+      .order("created_at", { ascending: true });
 
     return (data ?? []).map((row) => ({
       id: row.id as string,
       takenAt: row.taken_at as string,
       note: row.note as string,
       tagLabel: (row.tag as unknown as { label: string } | null)?.label ?? null,
+      authorName:
+        (row.author as unknown as { display_name: string } | null)
+          ?.display_name ?? "Unknown",
+    }));
+  }
+
+  async getActionImpacts(brandId: string): Promise<ActionImpact[]> {
+    const { data } = await this.supabase
+      .from("brand_action_impact")
+      .select(
+        "action_id, before_avg_score, before_n, before_tag_count, after_avg_score, after_n, after_tag_count, weeks_after",
+      )
+      .eq("brand_id", brandId);
+
+    return (data ?? []).map((row) => ({
+      actionId: row.action_id as string,
+      before: {
+        avgScore: toNumberOrNull(row.before_avg_score),
+        n: Number(row.before_n),
+        tagCount: toNumberOrNull(row.before_tag_count),
+      },
+      after: {
+        avgScore: toNumberOrNull(row.after_avg_score),
+        n: Number(row.after_n),
+        tagCount: toNumberOrNull(row.after_tag_count),
+      },
+      weeksAfter: Number(row.weeks_after),
     }));
   }
 
@@ -145,4 +198,9 @@ export class SupabaseBrandTrendRepository implements BrandTrendRepository {
     if (error.code === "42501") return { ok: false, reason: "forbidden" };
     return { ok: false, reason: "invalid" };
   }
+}
+
+/** PostgREST returns numeric/bigint as number or string; SQL null stays null. */
+function toNumberOrNull(value: unknown): number | null {
+  return value === null || value === undefined ? null : Number(value);
 }

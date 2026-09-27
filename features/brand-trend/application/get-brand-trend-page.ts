@@ -1,19 +1,41 @@
 import type {
+  ActionImpact,
   BrandActionEntry,
   BrandSummary,
   BrandTrendRepository,
+  ScoreWindow,
   SpecialistStat,
   TagCount,
   TagOption,
   WeeklyScorePoint,
 } from "../ports/brand-trend-repository";
+import { scoreChange, type ScoreChangeResult } from "../domain/tag-trend";
+
+/**
+ * A brand action numbered in chronological order (1 = oldest), so the
+ * marker on the chart and its card under "What we changed" share a number.
+ */
+export interface NumberedAction extends BrandActionEntry {
+  number: number;
+  impact: ActionImpact | null;
+}
+
+/** The three summary tiles: last 4 weeks, reviewed replies, change. */
+export interface BrandScoreSummary {
+  last4Weeks: ScoreWindow;
+  previous4Weeks: ScoreWindow;
+  /** null when either window has no reviewed replies to compare. */
+  change: ScoreChangeResult | null;
+}
 
 export interface BrandTrendPageData {
   brand: BrandSummary;
+  summary: BrandScoreSummary;
   weeklyScores: WeeklyScorePoint[];
+  /** Chronological (oldest first). */
+  actions: NumberedAction[];
   tagCounts: TagCount[];
   specialistStats: SpecialistStat[];
-  actions: BrandActionEntry[];
   tagOptions: TagOption[];
 }
 
@@ -36,23 +58,45 @@ export async function getBrandTrendPage(
     return { ok: false, reason: "not_found" };
   }
 
-  const [weeklyScores, tagCounts, specialistStats, actions, tagOptions] =
-    await Promise.all([
-      repo.getWeeklyScores(brandId),
-      repo.getTagCounts(brandId),
-      repo.getSpecialistStats(brandId),
-      repo.getActions(brandId),
-      repo.getTagOptions(brandId),
-    ]);
+  const [
+    scoreWindows,
+    weeklyScores,
+    actions,
+    impacts,
+    tagCounts,
+    specialistStats,
+    tagOptions,
+  ] = await Promise.all([
+    repo.getScoreWindows(brandId),
+    repo.getWeeklyScores(brandId),
+    repo.getActions(brandId),
+    repo.getActionImpacts(brandId),
+    repo.getTagCounts(brandId),
+    repo.getSpecialistStats(brandId),
+    repo.getTagOptions(brandId),
+  ]);
+
+  const { last4Weeks, previous4Weeks } = scoreWindows;
+  const change =
+    last4Weeks.avgScore !== null && previous4Weeks.avgScore !== null
+      ? scoreChange(last4Weeks.avgScore, previous4Weeks.avgScore)
+      : null;
+
+  const impactByAction = new Map(impacts.map((i) => [i.actionId, i]));
 
   return {
     ok: true,
     data: {
       brand,
+      summary: { last4Weeks, previous4Weeks, change },
       weeklyScores,
+      actions: actions.map((action, index) => ({
+        ...action,
+        number: index + 1,
+        impact: impactByAction.get(action.id) ?? null,
+      })),
       tagCounts,
       specialistStats,
-      actions,
       tagOptions,
     },
   };
