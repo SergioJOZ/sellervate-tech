@@ -4,7 +4,10 @@ import { Outfit, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { createClient } from "@/lib/supabase/server";
 import { SupabaseAuthGateway } from "@/features/identity/infra/supabase-auth-gateway";
-import { SEED_USERS } from "@/features/identity/domain/seed-users";
+import {
+  SEED_USERS,
+  listSwitcherOptions,
+} from "@/features/identity/domain/seed-users";
 import { UserSwitcher } from "@/features/identity/ui/UserSwitcher";
 
 const outfit = Outfit({
@@ -88,7 +91,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             )}
           </div>
           <div className="flex-none">
-            <UserSwitcher currentUserKey={currentUserKey} />
+            <UserSwitcher
+              users={listSwitcherOptions()}
+              currentUserKey={currentUserKey}
+            />
           </div>
         </header>
         <main className="flex flex-1 flex-col">{children}</main>
