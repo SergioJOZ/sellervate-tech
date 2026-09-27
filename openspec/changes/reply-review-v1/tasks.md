@@ -88,7 +88,7 @@ Spec refs: identity-switcher (all requirements). Design refs: A2, A9, sequence d
 
 - [x] 4.1 Create `lib/supabase/server.ts` (`createServerClient` from cookies) and `lib/supabase/client.ts` (`createBrowserClient`).
 - [x] 4.2 Create `proxy.ts` for session refresh per `@supabase/ssr` App Router pattern.
-- [x] 4.3 Create `features/identity/domain/seed-users.ts` (`SEED_USERS` constant, no password) and `application/switch-user.ts`. Note: dropped the `server-only` import from `seed-users.ts` because the switcher UI (a Client Component) must render the same user list; the module holds no secret (password stays in `SEED_USER_PASSWORD`, read only inside the Server Action).
+- [x] 4.3 Create `features/identity/domain/seed-users.ts` (`SEED_USERS` constant, no password) and `application/switch-user.ts`. `seed-users.ts` is `server-only`; the client switcher receives `SwitcherOption`s (no emails) from the layout.
 - [x] 4.4 Create Server Action `app/actions/switch-user.ts`: refuses to run unless `STUB_AUTH=true`, calls `signInWithPassword` with `SEED_USER_PASSWORD` from server env, sets session cookies.
 - [x] 4.5 Create `features/identity/ui/UserSwitcher.tsx`, mounted in `app/layout.tsx` corner.
 - [x] 4.6 Update `app/layout.tsx`: theme/fonts wiring from PR 1, nav built from claims (`user_role`, `brand_ids`), hides queue/brand links for specialists.
