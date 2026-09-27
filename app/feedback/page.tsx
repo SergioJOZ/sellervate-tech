@@ -1,23 +1,24 @@
 import { createClient } from "@/lib/supabase/server";
+import { SupabaseFeedbackRepository } from "@/features/feedback/infra/supabase-feedback-repository";
+import { getFeedbackFeed } from "@/features/feedback/application/get-feedback-feed";
+import { FeedbackFeed } from "@/features/feedback/ui/FeedbackFeed";
+import { EmptyState } from "@/features/feedback/ui/EmptyState";
 
-/**
- * Minimal placeholder — the specialist feedback feed lands in PR 6. This
- * page only proves the post-switch redirect for specialists.
- */
 export default async function FeedbackPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const repo = new SupabaseFeedbackRepository(supabase);
+  const items = await getFeedbackFeed(repo);
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-2 p-8 text-center">
-      <p className="text-lg">
-        Signed in as {user?.email ?? "unknown"} · specialist.
-      </p>
-      <p className="text-sm opacity-70">
-        Your feedback view lands in a later PR.
-      </p>
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 p-8">
+      <header>
+        <h1 className="text-2xl font-semibold text-primary">My feedback</h1>
+        <p className="text-sm opacity-70">
+          Your reviewed replies, with the score and note from your team lead.
+        </p>
+      </header>
+
+      {items.length === 0 ? <EmptyState /> : <FeedbackFeed items={items} />}
     </div>
   );
 }

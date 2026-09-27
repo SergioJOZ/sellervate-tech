@@ -113,13 +113,13 @@ Spec refs: reply-review (all requirements). Design refs: A5, A6, A21, sequence d
 
 Spec refs: brand-trend (all requirements), specialist-feedback (all requirements). Design refs: A13-A15, A19, A20, Application Structure (`features/brand-trend`, `features/feedback`).
 
-- [ ] 6.1 Create `features/brand-trend/{application,ports,infra}` reading `brand_weekly_scores`, `brand_tag_counts`, `brand_specialist_stats` views.
-- [ ] 6.2 Create `features/brand-trend/ui/TrendChart.tsx`: hand-rolled server-rendered SVG line with `n` under each week and `brand_actions` markers (A15).
-- [ ] 6.3 Create `features/brand-trend/ui/{TagComparison,SpecialistTable,ActionForm}.tsx`.
-- [ ] 6.4 Create `app/brands/[brandId]/page.tsx` and `actions.ts` (action form submit), with empty state for zero-review brands.
-- [ ] 6.5 Create `features/feedback/{application,ports,infra}` reading the specialist's own reviewed replies only, and `ui/FeedbackFeed.tsx`; wire `app/feedback/page.tsx` with empty state.
-- [ ] 6.6 Add `loading.tsx`/`error.tsx` for `app/brands/[brandId]` and `app/feedback`.
-- [ ] 6.7 Verify: brand page for a brand with no reviews shows empty state; tag comparison shows last-4-weeks vs previous-4-weeks counts (design example: 3 vs 9); specialist row for a shared specialist reflects only this brand's reviews; action form insert succeeds for own brand; curl a direct `brand_actions` insert for a brand not led by the user returns denied; curl feedback-view queries as a specialist for another specialist's data return no rows; curl a specialist's own data after brand membership removal still returns their history.
+- [x] 6.1 Create `features/brand-trend/{application,ports,infra}` reading `brand_weekly_scores`, `brand_tag_counts`, `brand_specialist_stats` views.
+- [x] 6.2 Create `features/brand-trend/ui/TrendChart.tsx`: hand-rolled server-rendered SVG line with `n` under each week and `brand_actions` markers (A15).
+- [x] 6.3 Create `features/brand-trend/ui/{TagComparison,SpecialistTable,ActionForm}.tsx`.
+- [x] 6.4 Create `app/brands/[brandId]/page.tsx` and `actions.ts` (action form submit), with empty state for zero-review brands.
+- [x] 6.5 Create `features/feedback/{application,ports,infra}` reading the specialist's own reviewed replies only, and `ui/FeedbackFeed.tsx`; wire `app/feedback/page.tsx` with empty state.
+- [x] 6.6 Add `loading.tsx`/`error.tsx` for `app/brands/[brandId]` and `app/feedback`.
+- [x] 6.7 Verify: brand page for a brand with no reviews shows empty state; tag comparison shows last-4-weeks vs previous-4-weeks counts (design example: 3 vs 9); specialist row for a shared specialist reflects only this brand's reviews; action form insert succeeds for own brand; curl a direct `brand_actions` insert for a brand not led by the user returns denied; curl feedback-view queries as a specialist for another specialist's data return no rows; curl a specialist's own data after brand membership removal still returns their history. See apply report for the full transcript.
 
 ## PR 7: README + DECISIONS.md
 
