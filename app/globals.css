@@ -17,7 +17,7 @@
   --color-secondary: #2e3742;
   --color-secondary-content: #e6e9ee;
 
-  --color-accent: #3fb8a9;
+  --color-accent: #9bbbd9;
   --color-accent-content: #1d232a;
 
   --color-neutral: #252c35;
@@ -26,13 +26,13 @@
   --color-info: #6b9ac4;
   --color-info-content: #1d232a;
 
-  --color-success: #46c46e;
-  --color-success-content: #10281a;
+  --color-success: #00ca92;
+  --color-success-content: #00291d;
 
-  --color-warning: #d6b34a;
-  --color-warning-content: #2b2308;
+  --color-warning: #ffc22d;
+  --color-warning-content: #2b2002;
 
-  --color-error: #e5484d;
+  --color-error: #ff6f70;
   --color-error-content: #2b0d0e;
 
   --radius-selector: 0.5rem;
@@ -56,26 +56,16 @@
   --text-lg: 1.25rem;
   --text-xl: 1.5625rem;
   --text-2xl: 1.953125rem;
-}
 
-:root {
-  /* Reading surface: distinct from base-100/200/300, used for reply/customer message panels. */
+  /* Reading surface for reply and customer message panels. */
   --color-reading-surface: #2a323c;
 
-  /* Score ramp: intentionally separate from daisyui error/success tokens (A22). */
-  --score-1: #e5484d; /* Harmful */
-  --score-2: #f28c3b; /* Poor */
-  --score-3: #d6b34a; /* Acceptable */
-  --score-4: #3fb8a9; /* Good */
-  --score-5: #46c46e; /* Exemplary */
-}
-
-.bg-reading-surface {
-  background-color: var(--color-reading-surface);
-}
-
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
+  /* Score ramp: own tokens, never reused by daisyUI error/success/accent (A22). */
+  --color-score-1: #e5484d; /* Harmful */
+  --color-score-2: #f28c3b; /* Poor */
+  --color-score-3: #d6b34a; /* Acceptable */
+  --color-score-4: #3fb8a9; /* Good */
+  --color-score-5: #46c46e; /* Exemplary */
 }
 
 body {

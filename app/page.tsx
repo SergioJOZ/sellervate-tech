@@ -8,13 +8,8 @@ export default function Home() {
         </p>
         <p className="mt-6 text-sm">
           Example score:{" "}
-          <span
-            className="tabular-nums font-medium"
-            style={{ color: "var(--score-4)" }}
-          >
-            4
-          </span>{" "}
-          — Good
+          <span className="tabular-nums font-medium text-score-4">4</span> —
+          Good
         </p>
       </div>
     </main>
