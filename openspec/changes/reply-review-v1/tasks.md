@@ -86,14 +86,14 @@ Spec refs: reply-review scenarios (queue/tags), access-control isolation scenari
 
 Spec refs: identity-switcher (all requirements). Design refs: A2, A9, sequence diagram 1, Application Structure.
 
-- [ ] 4.1 Create `lib/supabase/server.ts` (`createServerClient` from cookies) and `lib/supabase/client.ts` (`createBrowserClient`).
-- [ ] 4.2 Create `proxy.ts` for session refresh per `@supabase/ssr` App Router pattern.
-- [ ] 4.3 Create `features/identity/domain/seed-users.ts` (server-only `SEED_USERS` constant) and `application/switch-user.ts`.
-- [ ] 4.4 Create Server Action `app/actions/switch-user.ts`: refuses to run unless `STUB_AUTH=true`, calls `signInWithPassword` with `SEED_USER_PASSWORD` from server env, sets session cookies.
-- [ ] 4.5 Create `features/identity/ui/UserSwitcher.tsx`, mounted in `app/layout.tsx` corner.
-- [ ] 4.6 Update `app/layout.tsx`: theme/fonts wiring from PR 1, nav built from claims (`user_role`, `brand_ids`), hides queue/brand links for specialists.
-- [ ] 4.7 Create `app/page.tsx`: redirect `team_lead` -> `/queue`, `specialist` -> `/feedback`.
-- [ ] 4.8 Verify: switching to Marta lands on `/queue`; switching to Dani lands on `/feedback` with no queue/brand nav links; a direct PostgREST request after switching uses the new session (spot-check via curl with the session's access token).
+- [x] 4.1 Create `lib/supabase/server.ts` (`createServerClient` from cookies) and `lib/supabase/client.ts` (`createBrowserClient`).
+- [x] 4.2 Create `proxy.ts` for session refresh per `@supabase/ssr` App Router pattern.
+- [x] 4.3 Create `features/identity/domain/seed-users.ts` (`SEED_USERS` constant, no password) and `application/switch-user.ts`. `seed-users.ts` is `server-only`; the client switcher receives `SwitcherOption`s (no emails) from the layout.
+- [x] 4.4 Create Server Action `app/actions/switch-user.ts`: refuses to run unless `STUB_AUTH=true`, calls `signInWithPassword` with `SEED_USER_PASSWORD` from server env, sets session cookies.
+- [x] 4.5 Create `features/identity/ui/UserSwitcher.tsx`, mounted in `app/layout.tsx` corner.
+- [x] 4.6 Update `app/layout.tsx`: theme/fonts wiring from PR 1, nav built from claims (`user_role`, `brand_ids`), hides queue/brand links for specialists.
+- [x] 4.7 Create `app/page.tsx`: redirect `team_lead` -> `/queue`, `specialist` -> `/feedback`.
+- [x] 4.8 Verify: switching to Marta lands on `/queue`; switching to Dani lands on `/feedback` with no queue/brand nav links; a direct PostgREST request after switching uses the new session (verified via curl with the session's access token). See apply report for the full transcript.
 
 ## PR 5: Review loop
 
