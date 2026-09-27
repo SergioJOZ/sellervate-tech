@@ -131,4 +131,4 @@ Each feature follows a hexagonal layout: pure rules in `domain/`, use cases in `
 
 ## Time spent
 
-**Real time spent:** _TBD_
+**Real time spent:** 4 h 43 min (3:00 pm to 7:43 pm), inside the 6-hour cap.
