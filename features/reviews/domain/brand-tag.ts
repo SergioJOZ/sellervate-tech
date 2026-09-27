@@ -2,7 +2,8 @@
  * Pure rules for a tag a team lead creates from the review form. The
  * database stays the enforcement point for who may create it (RLS
  * `tags_insert`) and for uniqueness (UNIQUE NULLS NOT DISTINCT
- * (brand_id, slug)); these rules only shape the input.
+ * (brand_id, slug), plus a trigger rejecting a global tag's slug); these
+ * rules only shape the input.
  */
 export const TAG_LABEL_MAX_LENGTH = 40;
 

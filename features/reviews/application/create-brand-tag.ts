@@ -41,11 +41,13 @@ export async function createBrandTag(
   if (result.ok) return result;
 
   switch (result.reason) {
+    // 23505: the same slug for this brand, or a global tag's slug
+    // (`tags_reject_global_slug_shadow`), so the wording covers both.
     case "duplicate":
       return {
         ok: false,
         reason: "duplicate",
-        message: `A tag with that name already exists for ${reply.brandName}.`,
+        message: "A tag with that name already exists.",
       };
     case "forbidden":
       return {
