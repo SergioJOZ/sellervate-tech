@@ -2,11 +2,8 @@ import type {
   FeedbackItem,
   FeedbackRepository,
 } from "../ports/feedback-repository";
-import {
-  scoreChange,
-  scoreWindowOf,
-  type ScoreChange,
-} from "../domain/score-window";
+import { scoreWindowOf } from "../domain/score-window";
+import { scoreChange, type ScoreChange } from "@/lib/score";
 
 export interface ScoreWindowStats {
   /** null when the window has no reviewed replies. */

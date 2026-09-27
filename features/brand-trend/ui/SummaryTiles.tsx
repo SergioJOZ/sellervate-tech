@@ -1,19 +1,10 @@
-import type { ReactNode } from "react";
 import type { BrandScoreSummary } from "../application/get-brand-trend-page";
 import { roundScore, scoreLabel, SCORE_TEXT_CLASSES } from "@/lib/score";
-import { formatAverage, formatDelta } from "./format";
+import { formatAverage, formatDelta } from "@/lib/format";
+import { StatTile } from "@/components/ui/StatTile";
 
 interface SummaryTilesProps {
   summary: BrandScoreSummary;
-}
-
-function Tile({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <div className="rounded-box flex flex-col gap-1 border border-base-300 bg-base-200 p-4">
-      <p className="text-sm opacity-70">{title}</p>
-      {children}
-    </div>
-  );
 }
 
 /**
@@ -26,7 +17,7 @@ export function SummaryTiles({ summary }: SummaryTilesProps) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-3">
-      <Tile title="Last 4 weeks">
+      <StatTile title="Last 4 weeks" caption="Average score">
         {last4Weeks.avgScore === null ? (
           <p className="text-sm">No reviewed replies yet</p>
         ) : (
@@ -39,15 +30,13 @@ export function SummaryTiles({ summary }: SummaryTilesProps) {
             </span>
           </p>
         )}
-        <p className="text-xs opacity-60">Average score</p>
-      </Tile>
+      </StatTile>
 
-      <Tile title="Reviewed replies">
+      <StatTile title="Reviewed replies" caption="Sent in the last 4 weeks">
         <p className="text-xl font-semibold tabular-nums">{last4Weeks.n}</p>
-        <p className="text-xs opacity-60">Sent in the last 4 weeks</p>
-      </Tile>
+      </StatTile>
 
-      <Tile title="vs previous 4 weeks">
+      <StatTile title="vs previous 4 weeks" caption="Change in average score">
         {change === null || previous4Weeks.avgScore === null ? (
           <p className="text-sm">
             {previous4Weeks.avgScore === null
@@ -62,8 +51,7 @@ export function SummaryTiles({ summary }: SummaryTilesProps) {
             </span>
           </p>
         )}
-        <p className="text-xs opacity-60">Change in average score</p>
-      </Tile>
+      </StatTile>
     </div>
   );
 }

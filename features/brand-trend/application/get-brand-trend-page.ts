@@ -9,7 +9,7 @@ import type {
   TagOption,
   WeeklyScorePoint,
 } from "../ports/brand-trend-repository";
-import { scoreChange, type ScoreChangeResult } from "../domain/tag-trend";
+import { scoreChange, type ScoreChange } from "@/lib/score";
 
 /**
  * A brand action numbered in chronological order (1 = oldest), so the
@@ -25,7 +25,7 @@ export interface BrandScoreSummary {
   last4Weeks: ScoreWindow;
   previous4Weeks: ScoreWindow;
   /** null when either window has no reviewed replies to compare. */
-  change: ScoreChangeResult | null;
+  change: ScoreChange | null;
 }
 
 export interface BrandTrendPageData {

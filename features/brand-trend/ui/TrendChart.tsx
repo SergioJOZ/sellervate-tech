@@ -6,14 +6,8 @@ import {
   SCORE_TEXT_CLASSES,
   SCORE_VALUES,
 } from "@/lib/score";
-import {
-  actionMarker,
-  formatAverage,
-  formatDate,
-  formatWeek,
-  pluralize,
-  truncate,
-} from "./format";
+import { formatAverage, pluralize } from "@/lib/format";
+import { actionMarker, formatDate, formatWeek, truncate } from "./format";
 
 interface TrendChartProps {
   weeklyScores: WeeklyScorePoint[];

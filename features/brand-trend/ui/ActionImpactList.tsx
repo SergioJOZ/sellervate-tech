@@ -2,7 +2,8 @@ import type { NumberedAction } from "../application/get-brand-trend-page";
 import type { ImpactWindow } from "../ports/brand-trend-repository";
 import { countChange } from "../domain/tag-trend";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { actionMarker, formatAverage, formatDate, pluralize } from "./format";
+import { formatAverage, pluralize } from "@/lib/format";
+import { actionMarker, formatDate } from "./format";
 
 interface ActionImpactListProps {
   /** Chronological, as numbered by the use case; shown newest first. */

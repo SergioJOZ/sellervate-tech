@@ -42,3 +42,40 @@ export const SCORE_TEXT_CLASSES: Record<Score, string> = {
   4: "text-score-4",
   5: "text-score-5",
 };
+
+/**
+ * Comparisons are rendered as text (an arrow, plus a word or number), never
+ * colour alone (A22). Shared by the brand page and the feedback page.
+ */
+export type Direction = "up" | "down" | "flat";
+
+export type DirectionSymbol = "↑" | "↓" | "→";
+
+export const DIRECTION_SYMBOLS: Record<Direction, DirectionSymbol> = {
+  up: "↑",
+  down: "↓",
+  flat: "→",
+};
+
+export function compareValues(current: number, previous: number): Direction {
+  if (current > previous) return "up";
+  if (current < previous) return "down";
+  return "flat";
+}
+
+export interface ScoreChange {
+  direction: Direction;
+  symbol: DirectionSymbol;
+  /** Difference rounded to one decimal, the precision the pages show. */
+  delta: number;
+}
+
+/**
+ * Average score now vs before. The delta is rounded to one decimal first, so
+ * "→ 0.0" is never shown next to an arrow pointing up or down.
+ */
+export function scoreChange(current: number, previous: number): ScoreChange {
+  const delta = Math.round((current - previous) * 10) / 10;
+  const direction = compareValues(delta, 0);
+  return { direction, symbol: DIRECTION_SYMBOLS[direction], delta };
+}

@@ -6,7 +6,10 @@ interface StatTileProps {
   children: ReactNode;
 }
 
-/** One summary figure: a title, the value, and what it is measured over. */
+/**
+ * One summary figure: a title, the value, and what it is measured over.
+ * Shared by the brand page and the feedback page summary tiles.
+ */
 export function StatTile({ title, caption, children }: StatTileProps) {
   return (
     <div className="rounded-box flex flex-col gap-1 border border-base-300 bg-base-200 p-4">

@@ -1,7 +1,7 @@
 import type { FeedbackSummary as FeedbackSummaryData } from "../application/get-feedback-summary";
 import { roundScore, scoreLabel, SCORE_TEXT_CLASSES } from "@/lib/score";
-import { StatTile } from "./StatTile";
-import { formatAverage, formatDelta, pluralize } from "./format";
+import { formatAverage, formatDelta, pluralize } from "@/lib/format";
+import { StatTile } from "@/components/ui/StatTile";
 
 interface FeedbackSummaryProps {
   summary: FeedbackSummaryData;

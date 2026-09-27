@@ -1,22 +1,14 @@
 /**
  * Pure comparison rules for the brand page. Every direction is rendered as
- * text (an arrow plus a word), never colour alone (design.md A22).
+ * text (an arrow plus a word), never colour alone (design.md A22). The
+ * average-score change is the shared `scoreChange` in `lib/score.ts`.
  */
-export type Direction = "up" | "down" | "flat";
-
-export type DirectionSymbol = "↑" | "↓" | "→";
-
-function compare(current: number, previous: number): Direction {
-  if (current > previous) return "up";
-  if (current < previous) return "down";
-  return "flat";
-}
-
-const SYMBOLS: Record<Direction, DirectionSymbol> = {
-  up: "↑",
-  down: "↓",
-  flat: "→",
-};
+import {
+  compareValues,
+  DIRECTION_SYMBOLS,
+  type Direction,
+  type DirectionSymbol,
+} from "@/lib/score";
 
 export interface TagDirectionResult {
   direction: Direction;
@@ -34,7 +26,7 @@ export function tagDirection(
   last4Weeks: number,
   previous4Weeks: number,
 ): TagDirectionResult {
-  const direction = compare(last4Weeks, previous4Weeks);
+  const direction = compareValues(last4Weeks, previous4Weeks);
   const label =
     direction === "up"
       ? "getting worse"
@@ -54,28 +46,8 @@ export interface CountChangeResult {
 
 /** A targeted tag's count before vs after a brand action. */
 export function countChange(before: number, after: number): CountChangeResult {
-  const direction = compare(after, before);
+  const direction = compareValues(after, before);
   const label =
     direction === "up" ? "more" : direction === "down" ? "fewer" : "no change";
-  return { direction, symbol: SYMBOLS[direction], label };
-}
-
-export interface ScoreChangeResult {
-  direction: Direction;
-  symbol: DirectionSymbol;
-  /** Difference rounded to one decimal, the precision the page shows. */
-  delta: number;
-}
-
-/**
- * Average score now vs before. The delta is rounded to one decimal first, so
- * "→ 0.0" is never shown next to an arrow pointing up or down.
- */
-export function scoreChange(
-  current: number,
-  previous: number,
-): ScoreChangeResult {
-  const delta = Math.round((current - previous) * 10) / 10;
-  const direction = compare(delta, 0);
-  return { direction, symbol: SYMBOLS[direction], delta };
+  return { direction, symbol: DIRECTION_SYMBOLS[direction], label };
 }
