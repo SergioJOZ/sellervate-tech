@@ -1,5 +1,11 @@
+export interface FeedbackTag {
+  id: string;
+  label: string;
+}
+
 export interface FeedbackItem {
   replyId: string;
+  brandId: string;
   brandName: string;
   sentAt: string;
   subject: string | null;
@@ -8,7 +14,7 @@ export interface FeedbackItem {
   score: number;
   note: string | null;
   reviewerName: string | null;
-  tagLabels: string[];
+  tags: FeedbackTag[];
 }
 
 /**
@@ -17,5 +23,6 @@ export interface FeedbackItem {
  * substitutes for it (spec: specialist-feedback).
  */
 export interface FeedbackRepository {
+  /** Every reviewed reply the caller authored, newest first by `sent_at`. */
   listOwnReviewedReplies(): Promise<FeedbackItem[]>;
 }

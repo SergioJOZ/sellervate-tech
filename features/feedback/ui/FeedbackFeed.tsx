@@ -53,11 +53,11 @@ export function FeedbackFeed({ items }: FeedbackFeedProps) {
             >
               {item.score} · {scoreLabel(roundScore(item.score))}
             </span>
-            {item.tagLabels.length > 0 && (
+            {item.tags.length > 0 && (
               <span className="flex flex-wrap gap-1">
-                {item.tagLabels.map((label) => (
-                  <span key={label} className="badge badge-sm badge-outline">
-                    {label}
+                {item.tags.map((tag) => (
+                  <span key={tag.id} className="badge badge-sm badge-outline">
+                    {tag.label}
                   </span>
                 ))}
               </span>
