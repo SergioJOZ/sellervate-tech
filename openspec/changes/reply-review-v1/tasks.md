@@ -72,15 +72,15 @@ Spec refs: access-control (all requirements), reply-review (score/tag DB constra
 
 Spec refs: reply-review scenarios (queue/tags), access-control isolation scenarios, brand-trend scenarios — seed must produce data hitting each. Design refs: A9, A10, decision 9 (exploration).
 
-- [ ] 3.0 Decision needed: confirm specialist names beyond Marta/Nuria/Dani, and the three brand names/slugs (scooter brand, packaging brand, DTC skincare brand) with the user before writing seed content (D1).
-- [ ] 3.1 `seed.sql`: insert `auth.users` + `auth.identities` for all seeded users via `crypt(pw, gen_salt('bf'))` (A10).
-- [ ] 3.2 Insert `profiles` (role per user) and `brands` (3 brands, confirmed names/slugs/voice_notes).
-- [ ] 3.3 Insert `brand_memberships`: Marta leads 2 brands, Nuria leads 1, specialists overlap brands so isolation scenarios are exercisable (specialist in a Marta brand + a Nuria brand).
-- [ ] 3.4 Insert `tags`: global tags plus at least one per-brand tag, matching the failure modes named in the brief (slow, wrong tone, answered different question, would not stop customer writing again, no order history check).
-- [ ] 3.5 Insert `replies` with `customer_message`, `subject`, `body`, `sent_at` spread across ~8 weeks relative to `now()` so weekly-trend and 4-week-vs-previous-4-week windows both have data.
-- [ ] 3.6 Insert `reviews` + `review_tags` for most (not all) replies, leaving some unreviewed per brand for queue scenarios; vary scores and tag counts per week to make a visible trend and a tag drop after an action.
-- [ ] 3.7 Insert `brand_actions` for at least one brand at a date between two review clusters.
-- [ ] 3.8 Verify: `supabase db reset` runs seed without error; row counts per table match expectations; querying `review_queue` as each seeded team lead (via PostgREST + that user's access token) returns only their brands' unreviewed replies.
+- [x] 3.0 Decision needed: confirm specialist names beyond Marta/Nuria/Dani, and the three brand names/slugs (scooter brand, packaging brand, DTC skincare brand) with the user before writing seed content (D1). Resolved by the user: Voltra (`voltra`, electric scooters), Boxwise (`boxwise`, packaging supplier), Lumé Skin (`lume-skin`, DTC skincare); specialists Dani, Leo, Sofía with Leo shared between Marta (Boxwise) and Nuria (Lumé Skin).
+- [x] 3.1 `seed.sql`: insert `auth.users` + `auth.identities` for all seeded users via `crypt(pw, gen_salt('bf'))` (A10).
+- [x] 3.2 Insert `profiles` (role per user) and `brands` (3 brands, confirmed names/slugs/voice_notes).
+- [x] 3.3 Insert `brand_memberships`: Marta leads 2 brands, Nuria leads 1, specialists overlap brands so isolation scenarios are exercisable (specialist in a Marta brand + a Nuria brand).
+- [x] 3.4 Insert `tags`: global tags plus at least one per-brand tag, matching the failure modes named in the brief (slow, wrong tone, answered different question, would not stop customer writing again, no order history check).
+- [x] 3.5 Insert `replies` with `customer_message`, `subject`, `body`, `sent_at` spread across ~8 weeks relative to `now()` so weekly-trend and 4-week-vs-previous-4-week windows both have data.
+- [x] 3.6 Insert `reviews` + `review_tags` for most (not all) replies, leaving some unreviewed per brand for queue scenarios; vary scores and tag counts per week to make a visible trend and a tag drop after an action.
+- [x] 3.7 Insert `brand_actions` for at least one brand at a date between two review clusters.
+- [x] 3.8 Verify: `supabase db reset` runs seed without error; row counts per table match expectations; querying `review_queue` as each seeded team lead (via PostgREST + that user's access token) returns only their brands' unreviewed replies.
 
 ## PR 4: Identity switcher + SSR clients + landing/nav
 
