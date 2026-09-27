@@ -1,0 +1,58 @@
+schema: spec-driven
+
+context: |
+  Project: sellervate-tech — 6-hour technical exercise (Sellervate).
+  Purpose: internal tool where team leads review specialists' past
+  customer-support replies per brand; specialists read their own feedback.
+  Framing: "reviewing problem".
+  Stack: Monorepo (public GitHub), Next.js App Router + TypeScript.
+  Data/Auth: Supabase (Postgres, local via `supabase start`), RLS for authz.
+  Styling: Tailwind CSS + daisyUI (custom theme).
+  Package manager: npm.
+  Testing: none planned (exercise scope excludes tests).
+
+strict_tdd: false
+
+testing:
+  test_runner: none
+  test_layers:
+    unit: false
+    integration: false
+    e2e: false
+  coverage:
+    available: false
+    command: ""
+  quality_tools:
+    linter: ESLint (Next.js config)
+    type_checker: tsc --noEmit
+    formatter: Prettier
+
+delivery:
+  strategy: ask-on-risk
+  review_budget_lines: 400
+
+rules:
+  proposal:
+    - Respect the "reviewing problem" framing (team lead review vs. specialist self-view)
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+    - Model authorization via Supabase RLS policies, not only app-layer checks
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    guidelines:
+      - Follow Next.js App Router conventions
+      - Follow existing code patterns
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: ""
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas
