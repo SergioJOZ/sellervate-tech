@@ -127,5 +127,5 @@ Spec refs: none (deliverables from proposal Success Criteria). Design refs: Test
 
 - [ ] 7.1 Write `README.md`: prerequisites, `supabase start`, `supabase db reset` (seed), `npm run dev`, list of seeded users and how to switch roles via the corner switcher.
 - [ ] 7.2 Time a clean clone-to-running walkthrough and adjust README until it is under 10 minutes.
-- [ ] 7.3 Finalize `DECISIONS.md`: cover AI-scoring rejection rationale, helpdesk-ingestion deferral, and any decisions made during apply (e.g., final PR chain strategy, seed names from D1).
+- [x] 7.3 Finalize `DECISIONS.md`: cover AI-scoring rejection rationale, helpdesk-ingestion deferral, and any decisions made during apply (e.g., final PR chain strategy, seed names from D1).
 - [ ] 7.4 Verify: a stranger following only the README reaches a running, seeded app in under 10 minutes; `DECISIONS.md` reflects the final resolved decisions list (proposal + design + this file).
