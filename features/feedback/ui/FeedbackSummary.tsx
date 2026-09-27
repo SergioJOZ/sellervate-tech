@@ -14,7 +14,7 @@ interface FeedbackSummaryProps {
  * the same as the brand page.
  */
 export function FeedbackSummary({ summary }: FeedbackSummaryProps) {
-  const { last4Weeks, previous4Weeks, change, mostFrequentIssue, byBrand } =
+  const { last4Weeks, previous4Weeks, change, mostFrequentIssues, byBrand } =
     summary;
 
   return (
@@ -58,12 +58,16 @@ export function FeedbackSummary({ summary }: FeedbackSummaryProps) {
       </div>
 
       <p className="text-sm">
-        <span className="opacity-70">Most frequent issue: </span>
-        {mostFrequentIssue === null ? (
+        <span className="opacity-70">
+          {mostFrequentIssues.length > 1
+            ? "Most frequent issues: "
+            : "Most frequent issue: "}
+        </span>
+        {mostFrequentIssues.length === 0 ? (
           <span>no issues tagged in the last 4 weeks</span>
         ) : (
           <span className="font-medium">
-            {mostFrequentIssue.label} ({mostFrequentIssue.count})
+            {`${mostFrequentIssues.map((issue) => issue.label).join(", ")} (${mostFrequentIssues[0].count}${mostFrequentIssues.length > 1 ? " each" : ""})`}
           </span>
         )}
       </p>

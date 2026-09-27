@@ -43,12 +43,16 @@ export class SupabaseFeedbackRepository implements FeedbackRepository {
   }
 
   private async fetchOwnReviewedReplies(): Promise<FeedbackItem[]> {
-    const { data } = await this.supabase.from("reviews").select(
+    const { data, error } = await this.supabase.from("reviews").select(
       `score, note,
          reviewer:profiles(display_name),
          reply:replies!inner(id, subject, customer_message, body, sent_at, brand:brands(id, name)),
          review_tags(tag:tags(id, label))`,
     );
+
+    // Throw rather than return [] so a failed query reaches
+    // `app/feedback/error.tsx` instead of reading as "No feedback yet".
+    if (error) throw error;
 
     const rows = (data ?? []) as unknown as ReviewRow[];
 

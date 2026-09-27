@@ -29,8 +29,11 @@ export interface FeedbackSummary {
   previous4Weeks: ScoreWindowStats;
   /** null when either window has no reviewed replies to compare. */
   change: ScoreChange | null;
-  /** Most frequent tag in the last 4 weeks; null when none was tagged. */
-  mostFrequentIssue: FrequentIssue | null;
+  /**
+   * Most frequent tags in the last 4 weeks: every tag tied for the top
+   * count, label A–Z. Empty when none was tagged.
+   */
+  mostFrequentIssues: FrequentIssue[];
   /** Last 4 weeks, only brands with reviews, best average first. */
   byBrand: BrandAverage[];
 }
@@ -47,8 +50,8 @@ function windowStats(items: FeedbackItem[]): ScoreWindowStats {
   return { avgScore: average(items.map((i) => i.score)), n: items.length };
 }
 
-/** Ties: higher count first, then label A–Z, so the pick is stable. */
-function mostFrequentIssue(items: FeedbackItem[]): FrequentIssue | null {
+/** Every tag tied for the highest count, label A–Z, so the order is stable. */
+function mostFrequentIssues(items: FeedbackItem[]): FrequentIssue[] {
   const counts = new Map<string, FrequentIssue>();
   for (const item of items) {
     for (const tag of item.tags) {
@@ -61,10 +64,11 @@ function mostFrequentIssue(items: FeedbackItem[]): FrequentIssue | null {
       counts.set(tag.id, entry);
     }
   }
-  const [top] = [...counts.values()].sort(
-    (a, b) => b.count - a.count || a.label.localeCompare(b.label),
-  );
-  return top ?? null;
+  const all = [...counts.values()];
+  const top = Math.max(0, ...all.map((issue) => issue.count));
+  return all
+    .filter((issue) => issue.count === top)
+    .sort((a, b) => a.label.localeCompare(b.label));
 }
 
 function byBrand(items: FeedbackItem[]): BrandAverage[] {
@@ -127,7 +131,7 @@ export async function getFeedbackSummary(
       last4Weeks,
       previous4Weeks,
       change,
-      mostFrequentIssue: mostFrequentIssue(last4),
+      mostFrequentIssues: mostFrequentIssues(last4),
       byBrand: byBrand(last4),
     },
   };

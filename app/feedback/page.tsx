@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { SupabaseAuthGateway } from "@/features/identity/infra/supabase-auth-gateway";
 import { SupabaseFeedbackRepository } from "@/features/feedback/infra/supabase-feedback-repository";
 import { getFeedbackFeed } from "@/features/feedback/application/get-feedback-feed";
 import { getFeedbackSummary } from "@/features/feedback/application/get-feedback-summary";
@@ -12,6 +14,14 @@ export default async function FeedbackPage({
   searchParams,
 }: PageProps<"/feedback">) {
   const supabase = await createClient();
+
+  // Signed out, RLS denies the query and the adapter throws; send the
+  // visitor to the switcher instead of the error page.
+  const claims = await new SupabaseAuthGateway(supabase).getClaims();
+  if (claims.userRole === null) {
+    redirect("/");
+  }
+
   const repo = new SupabaseFeedbackRepository(supabase);
   const [summaryResult, feed] = await Promise.all([
     getFeedbackSummary(repo, new Date()),
