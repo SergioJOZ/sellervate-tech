@@ -2,7 +2,7 @@ import type {
   BrandActionEntry,
   WeeklyScorePoint,
 } from "../ports/brand-trend-repository";
-import { scoreColorClass, scoreLabel } from "../domain/score-label";
+import { roundScore, scoreLabel, SCORE_TEXT_CLASSES } from "@/lib/score";
 
 interface TrendChartProps {
   weeklyScores: WeeklyScorePoint[];
@@ -67,7 +67,7 @@ export function TrendChart({ weeklyScores, actions }: TrendChartProps) {
           {points
             .map(
               (p) =>
-                `Week of ${formatWeek(p.week)}: average score ${p.avgScore.toFixed(1)} (${scoreLabel(p.avgScore)}) over ${p.n} review${p.n === 1 ? "" : "s"}`,
+                `Week of ${formatWeek(p.week)}: average score ${p.avgScore.toFixed(1)} (${scoreLabel(roundScore(p.avgScore))}) over ${p.n} review${p.n === 1 ? "" : "s"}`,
             )
             .join(". ")}
           {actions.length > 0
@@ -110,7 +110,7 @@ export function TrendChart({ weeklyScores, actions }: TrendChartProps) {
               cx={p.x}
               cy={p.y}
               r={4}
-              className={scoreColorClass(p.avgScore, "text")}
+              className={SCORE_TEXT_CLASSES[roundScore(p.avgScore)]}
               fill="currentColor"
             />
             <text
@@ -159,7 +159,7 @@ export function TrendChart({ weeklyScores, actions }: TrendChartProps) {
             <tr key={p.week}>
               <td>{formatWeek(p.week)}</td>
               <td>
-                {p.avgScore.toFixed(1)} ({scoreLabel(p.avgScore)})
+                {p.avgScore.toFixed(1)} ({scoreLabel(roundScore(p.avgScore))})
               </td>
               <td>{p.n}</td>
             </tr>

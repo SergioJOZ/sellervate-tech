@@ -1,5 +1,5 @@
 import type { FeedbackItem } from "../ports/feedback-repository";
-import { scoreColorClass, scoreLabel } from "../domain/score-label";
+import { roundScore, scoreLabel, SCORE_TEXT_CLASSES } from "@/lib/score";
 
 interface FeedbackFeedProps {
   items: FeedbackItem[];
@@ -48,8 +48,10 @@ export function FeedbackFeed({ items }: FeedbackFeedProps) {
           </div>
 
           <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-base-300 pt-4">
-            <span className={`font-semibold ${scoreColorClass(item.score)}`}>
-              {item.score} · {scoreLabel(item.score)}
+            <span
+              className={`font-semibold ${SCORE_TEXT_CLASSES[roundScore(item.score)]}`}
+            >
+              {item.score} · {scoreLabel(roundScore(item.score))}
             </span>
             {item.tagLabels.length > 0 && (
               <span className="flex flex-wrap gap-1">

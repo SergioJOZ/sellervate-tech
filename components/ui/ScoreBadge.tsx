@@ -1,4 +1,4 @@
-import { scoreLabel, type Score } from "@/features/reviews/domain/score";
+import { scoreLabel, type Score } from "@/lib/score";
 
 interface ScoreBadgeProps {
   score: Score;

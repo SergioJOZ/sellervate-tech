@@ -1,5 +1,5 @@
 import type { SpecialistStat } from "../ports/brand-trend-repository";
-import { scoreColorClass, scoreLabel } from "../domain/score-label";
+import { roundScore, scoreLabel, SCORE_TEXT_CLASSES } from "@/lib/score";
 
 interface SpecialistTableProps {
   specialistStats: SpecialistStat[];
@@ -34,8 +34,8 @@ export function SpecialistTable({ specialistStats }: SpecialistTableProps) {
           <tr key={s.specialistId}>
             <td>{s.displayName}</td>
             <td>
-              <span className={scoreColorClass(s.avgScore, "text")}>
-                {s.avgScore.toFixed(1)} ({scoreLabel(s.avgScore)})
+              <span className={SCORE_TEXT_CLASSES[roundScore(s.avgScore)]}>
+                {s.avgScore.toFixed(1)} ({scoreLabel(roundScore(s.avgScore))})
               </span>
             </td>
             <td className="tabular-nums">{s.n}</td>

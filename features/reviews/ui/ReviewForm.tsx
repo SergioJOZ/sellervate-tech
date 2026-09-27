@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { ScoreBadge } from "@/components/ui/ScoreBadge";
 import { TagChip } from "@/components/ui/TagChip";
-import { SCORE_VALUES, type Score } from "../domain/score";
+import { SCORE_VALUES, type Score } from "@/lib/score";
 import type { Tag } from "../ports/review-repository";
 import { ConfirmSummary } from "./ConfirmSummary";
 

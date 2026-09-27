@@ -1,4 +1,4 @@
-import { isValidScore } from "../domain/score";
+import { isValidScore } from "@/lib/score";
 import type {
   ReviewRepository,
   SubmitReviewResult,

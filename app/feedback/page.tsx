@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SupabaseFeedbackRepository } from "@/features/feedback/infra/supabase-feedback-repository";
 import { getFeedbackFeed } from "@/features/feedback/application/get-feedback-feed";
 import { FeedbackFeed } from "@/features/feedback/ui/FeedbackFeed";
-import { EmptyState } from "@/features/feedback/ui/EmptyState";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 export default async function FeedbackPage() {
   const supabase = await createClient();
@@ -18,7 +18,14 @@ export default async function FeedbackPage() {
         </p>
       </header>
 
-      {items.length === 0 ? <EmptyState /> : <FeedbackFeed items={items} />}
+      {items.length === 0 ? (
+        <EmptyState
+          title="No feedback yet"
+          description="Once a team lead reviews one of your replies, it shows up here."
+        />
+      ) : (
+        <FeedbackFeed items={items} />
+      )}
     </div>
   );
 }

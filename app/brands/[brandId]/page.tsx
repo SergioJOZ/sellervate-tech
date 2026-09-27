@@ -5,7 +5,7 @@ import { TrendChart } from "@/features/brand-trend/ui/TrendChart";
 import { TagComparison } from "@/features/brand-trend/ui/TagComparison";
 import { SpecialistTable } from "@/features/brand-trend/ui/SpecialistTable";
 import { ActionForm } from "@/features/brand-trend/ui/ActionForm";
-import { EmptyState } from "@/features/brand-trend/ui/EmptyState";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { recordBrandActionForBrand } from "./actions";
 
 export default async function BrandTrendPage({
@@ -22,7 +22,7 @@ export default async function BrandTrendPage({
       <div className="p-8">
         <EmptyState
           title="Brand not found"
-          message="This brand does not exist, or you are not a team lead for it."
+          description="This brand does not exist, or you are not a team lead for it."
         />
       </div>
     );
@@ -52,7 +52,7 @@ export default async function BrandTrendPage({
         {weeklyScores.length === 0 ? (
           <EmptyState
             title="No reviews yet"
-            message="Once replies for this brand are reviewed, the weekly trend appears here."
+            description="Once replies for this brand are reviewed, the weekly trend appears here."
           />
         ) : (
           <TrendChart weeklyScores={weeklyScores} actions={actions} />

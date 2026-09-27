@@ -1,6 +1,6 @@
 import { ScoreBadge } from "@/components/ui/ScoreBadge";
 import { TagChip } from "@/components/ui/TagChip";
-import type { Score } from "../domain/score";
+import type { Score } from "@/lib/score";
 import type { Tag } from "../ports/review-repository";
 
 interface ConfirmSummaryProps {
