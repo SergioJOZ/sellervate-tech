@@ -50,7 +50,7 @@ Spec refs: none (infra only, no capability requirements). Design refs: A1, A2, A
 - [x] 1.4 Add Prettier config and script; confirm ESLint + Prettier do not conflict.
 - [x] 1.5 Run `supabase init`; commit `supabase/config.toml` with default local ports.
 - [x] 1.6 Add `.gitattributes` marking `package-lock.json` as `linguist-generated`.
-- [ ] 1.7 Add `.env.example` documenting `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `STUB_AUTH`, `SEED_USER_PASSWORD`. BLOCKED: the executor's sandbox permission settings deny writing any `.env*` path (Write and Bash both denied by the auto-mode classifier); `.gitignore` was already updated with `!.env.example` in anticipation. Needs a human (or a session with broader file-write permission) to create this one file, then flip this box.
+- [x] 1.7 Add `.env.example` documenting `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `STUB_AUTH`, `SEED_USER_PASSWORD`. Created by hand: the executor was not allowed to write `.env*` files.
 - [x] 1.8 Verify: `npm run dev` serves the scaffold page with the dark theme applied (`data-theme="reply-review"`, `Reply Review` copy, `text-primary` visible); `npm run typecheck`, `npx eslint .`, `npm run format:check`, and `npm run build` all pass; no `app/queue`, `app/brands`, or feature code exists yet.
 
 ## PR 2: Schema + RLS + helpers + hook + views + submit_review
