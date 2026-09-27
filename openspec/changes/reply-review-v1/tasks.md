@@ -44,14 +44,14 @@ If PR 2, 3, or 5 forecast confirms High, each further splits: PR 2 into schema-o
 
 Spec refs: none (infra only, no capability requirements). Design refs: A1, A2, A3, A22.
 
-- [ ] 1.1 Run `create-next-app` (Next 16, TypeScript, Tailwind v4, ESLint, App Router, `src/` off).
-- [ ] 1.2 Add daisyUI v5 via CSS-first `@plugin "daisyui"` and a custom `@plugin "daisyui/theme"` block in `app/globals.css` with A22 tokens (surfaces, primary, score ramp, fonts).
-- [ ] 1.3 Wire `next/font` for Outfit and Source Serif 4 in `app/layout.tsx`.
-- [ ] 1.4 Add Prettier config and script; confirm ESLint + Prettier do not conflict.
-- [ ] 1.5 Run `supabase init`; commit `supabase/config.toml` with default local ports.
-- [ ] 1.6 Add `.gitattributes` marking `package-lock.json` as `linguist-generated`.
-- [ ] 1.7 Add `.env.example` documenting `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `STUB_AUTH`, `SEED_USER_PASSWORD`.
-- [ ] 1.8 Verify: `npm run dev` serves the default scaffold page with the dark theme applied; `tsc --noEmit` and `npx eslint .` pass; no `app/queue`, `app/brands`, or feature code exists yet.
+- [x] 1.1 Run `create-next-app` (Next 16, TypeScript, Tailwind v4, ESLint, App Router, `src/` off).
+- [x] 1.2 Add daisyUI v5 via CSS-first `@plugin "daisyui"` and a custom `@plugin "daisyui/theme"` block in `app/globals.css` with A22 tokens (surfaces, primary, score ramp, fonts).
+- [x] 1.3 Wire `next/font` for Outfit and Source Serif 4 in `app/layout.tsx`.
+- [x] 1.4 Add Prettier config and script; confirm ESLint + Prettier do not conflict.
+- [x] 1.5 Run `supabase init`; commit `supabase/config.toml` with default local ports.
+- [x] 1.6 Add `.gitattributes` marking `package-lock.json` as `linguist-generated`.
+- [x] 1.7 Add `.env.example` documenting `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `STUB_AUTH`, `SEED_USER_PASSWORD`. Created by hand: the executor was not allowed to write `.env*` files.
+- [x] 1.8 Verify: `npm run dev` serves the scaffold page with the dark theme applied (`data-theme="reply-review"`, `Reply Review` copy, `text-primary` visible); `npm run typecheck`, `npx eslint .`, `npm run format:check`, and `npm run build` all pass; no `app/queue`, `app/brands`, or feature code exists yet.
 
 ## PR 2: Schema + RLS + helpers + hook + views + submit_review
 

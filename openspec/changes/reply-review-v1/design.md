@@ -212,7 +212,8 @@ A custom daisyUI theme (`@plugin "daisyui/theme"`), dark by default, in the fami
 - **Surfaces**: base-100 `#1d232a`, base-200 `#252c35`, base-300 `#2e3742`, reading surface `#2a323c`, text `#e6e9ee`. Primary is steel blue `#6b9ac4`.
 - **Fonts** via `next/font`: Outfit (UI, 400/500/600) and Source Serif 4 for reply and customer text at 17px with line-height 1.6. Scores and `n` use tabular numerals.
 - **Type scale**: major third (1.25), base 16: 12 / 14 / 16 / 17 (replies) / 20 / 25 / 31.
-- **Score ramp** tokens, kept separate from daisyUI `error`/`success`: `--score-1` `#e5484d` Harmful, `--score-2` `#f28c3b` Poor, `--score-3` `#d6b34a` Acceptable, `--score-4` `#3fb8a9` Good, `--score-5` `#46c46e` Exemplary. A score always shows as number plus label, never colour alone.
+- **Score ramp** as Tailwind theme tokens (`--color-score-1..5`, used as `text-score-N` / `bg-score-N`): `#e5484d` Harmful, `#f28c3b` Poor, `#d6b34a` Acceptable, `#3fb8a9` Good, `#46c46e` Exemplary. The reading surface is `--color-reading-surface` (`bg-reading-surface`), and reply text uses `text-reply` (17px, line-height 1.6). A score always shows as number plus label, never colour alone.
+- **System colours** never reuse a score colour, so "Harmful" is never mistaken for a failed request: error `#ff6f70`, success `#00ca92` and warning `#ffc22d` (taken from sellervate.com's palette), accent `#9bbbd9` (a lighter steel blue), info = primary.
 - **Designed states**: every route has `loading.tsx` (skeleton), `error.tsx` and a purpose-written `EmptyState`, for example "Queue clear — nothing unreviewed in your brands."
 
 ## File Changes
