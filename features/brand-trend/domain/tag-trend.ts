@@ -26,7 +26,9 @@ export interface TagDirectionResult {
 
 /**
  * A failure tag counted in the last 4 weeks vs the 4 weeks before: more
- * occurrences means the brand is getting worse at it.
+ * occurrences means the brand is getting worse at it. The arrow follows
+ * quality, like the score tiles (↑ = better), not the raw count: fewer
+ * failures read as "↑ improving".
  */
 export function tagDirection(
   last4Weeks: number,
@@ -39,7 +41,9 @@ export function tagDirection(
       : direction === "down"
         ? "improving"
         : "no change";
-  return { direction, symbol: SYMBOLS[direction], label };
+  const symbol: DirectionSymbol =
+    direction === "up" ? "↓" : direction === "down" ? "↑" : "→";
+  return { direction, symbol, label };
 }
 
 export interface CountChangeResult {
