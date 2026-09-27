@@ -91,7 +91,7 @@ Brief line shaping the reviews model: "she records how good it was and what was 
 | 6 | Reviews are immutable once saved (no UPDATE policy). |
 | 7 | Tags live in a table with optional `brand_id` (`NULL` = global) plus a `review_tags` join table. A Postgres enum was considered and rejected: values cannot be dropped and per-brand tags would require a remodel. |
 | 8 | Review queue: unreviewed replies of brands where the user is `team_lead`, ordered by `sent_at DESC`, filterable by brand. |
-| 9 | Seed: three brands (technical scooter brand, fast/exact packaging brand, a third brand with a distinct voice). Marta leads two, Nuria leads one; specialists overlap brands so isolation is visible. Names and content to be defined with the seed. |
+| 9 | Seed: three brands (technical scooter brand, fast/exact packaging brand, warm/empathetic DTC skincare brand whose key procedure is never giving medical advice on skin reactions). Marta leads two, Nuria leads one; specialists overlap brands so isolation is visible. Names and content to be defined with the seed. |
 | 10 | "What we changed about it" is a brand-level action log: `brand_actions(brand_id, author_id, taken_at, note, tag_id NULL)`, shown as markers on the brand trend. |
 | 11 | Score scale 1–5 (`smallint`, `CHECK 1..5`): 1 Harmful, 2 Poor, 3 Acceptable, 4 Good, 5 Exemplary. |
 
