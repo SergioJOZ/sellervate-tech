@@ -15,6 +15,14 @@ interface QueueListProps {
  * `useSearchParams` (`?brand=<id or slug>`) and restricted to the lead's
  * own brands — an unknown/foreign value in the query param is ignored.
  */
+function timeAgo(iso: string): string {
+  const minutes = Math.round((Date.now() - new Date(iso).getTime()) / 60_000);
+  if (minutes < 60) return `${Math.max(1, minutes)}m ago`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.round(hours / 24)}d ago`;
+}
+
 export function QueueList({ replies, brands }: QueueListProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -31,6 +39,8 @@ export function QueueList({ replies, brands }: QueueListProps) {
   const visibleReplies = selectedBrandId
     ? replies.filter((r) => r.brandId === selectedBrandId)
     : replies;
+
+  const brandNameById = new Map(brands.map((b) => [b.id, b.name]));
 
   const brandFilterHref = (brandId: string | null) =>
     brandId ? `/queue?brand=${brandId}` : "/queue";
@@ -77,9 +87,22 @@ export function QueueList({ replies, brands }: QueueListProps) {
                     : "border-base-300 bg-base-200 hover:bg-base-300"
                 }`}
               >
-                <p className="font-medium">{reply.subject || "(no subject)"}</p>
-                <p className="mt-1 text-xs opacity-70">
-                  {new Date(reply.sentAt).toLocaleString()}
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="badge badge-sm badge-soft badge-primary font-semibold uppercase tracking-wide">
+                    {brandNameById.get(reply.brandId) ?? "Unknown brand"}
+                  </span>
+                  <span className="font-medium">{reply.specialistName}</span>
+                  {/* Relative time depends on the clock, so server and client can differ by a minute. */}
+                  <time
+                    dateTime={reply.sentAt}
+                    className="ml-auto opacity-60"
+                    suppressHydrationWarning
+                  >
+                    {timeAgo(reply.sentAt)}
+                  </time>
+                </div>
+                <p className="mt-2 font-medium">
+                  {reply.subject || "(no subject)"}
                 </p>
               </Link>
             </li>

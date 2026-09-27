@@ -11,11 +11,19 @@ interface ReplyViewProps {
 export function ReplyView({ reply }: ReplyViewProps) {
   return (
     <div className="bg-reading-surface rounded-box flex flex-col gap-4 border border-base-300 p-6">
-      <div className="flex flex-wrap items-baseline justify-between gap-2 text-sm opacity-70">
-        <span>{reply.brandName}</span>
-        <span>{reply.specialistName}</span>
-        <span>{new Date(reply.sentAt).toLocaleString()}</span>
-      </div>
+      <header className="flex flex-col gap-1 border-b border-base-300 pb-4">
+        <span className="badge badge-soft badge-primary self-start font-semibold uppercase tracking-wide">
+          {reply.brandName}
+        </span>
+        <p className="text-sm">
+          Written by{" "}
+          <span className="font-semibold">{reply.specialistName}</span>
+          <span className="opacity-60">
+            {" "}
+            · {new Date(reply.sentAt).toLocaleString()}
+          </span>
+        </p>
+      </header>
 
       {reply.subject ? (
         <h1 className="text-xl font-semibold">{reply.subject}</h1>
@@ -31,7 +39,9 @@ export function ReplyView({ reply }: ReplyViewProps) {
       </section>
 
       <section>
-        <h2 className="text-xs font-medium uppercase opacity-60">Reply</h2>
+        <h2 className="text-xs font-medium uppercase opacity-60">
+          {reply.specialistName}&apos;s reply
+        </h2>
         <p className="font-serif text-reply mt-1 whitespace-pre-wrap">
           {reply.body}
         </p>

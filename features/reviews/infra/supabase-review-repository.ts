@@ -25,7 +25,7 @@ export class SupabaseReviewRepository implements ReviewRepository {
   async listQueue(brandId: string | null): Promise<QueueReply[]> {
     let query = this.supabase
       .from("review_queue")
-      .select("id, brand_id, subject, customer_message, sent_at")
+      .select("id, brand_id, specialist_id, subject, customer_message, sent_at")
       .order("sent_at", { ascending: false });
 
     if (brandId) {
@@ -34,10 +34,27 @@ export class SupabaseReviewRepository implements ReviewRepository {
 
     const { data, error } = await query;
     if (error) throw error;
+    const rows = data ?? [];
 
-    return (data ?? []).map((row) => ({
+    // Specialist names through the profiles RLS (a lead sees the profiles
+    // of people who share one of their brands, design A17).
+    const specialistIds = [...new Set(rows.map((row) => row.specialist_id))];
+    const { data: profiles, error: profilesError } =
+      specialistIds.length > 0
+        ? await this.supabase
+            .from("profiles")
+            .select("id, display_name")
+            .in("id", specialistIds)
+        : { data: [], error: null };
+    if (profilesError) throw profilesError;
+    const nameById = new Map(
+      (profiles ?? []).map((p) => [p.id, p.display_name as string]),
+    );
+
+    return rows.map((row) => ({
       id: row.id,
       brandId: row.brand_id,
+      specialistName: nameById.get(row.specialist_id) ?? "Unknown specialist",
       subject: row.subject,
       customerMessage: row.customer_message,
       sentAt: row.sent_at,

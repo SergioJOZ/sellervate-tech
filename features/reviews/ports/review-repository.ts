@@ -1,6 +1,7 @@
 export interface QueueReply {
   id: string;
   brandId: string;
+  specialistName: string;
   subject: string | null;
   customerMessage: string;
   sentAt: string;
