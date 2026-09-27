@@ -57,16 +57,16 @@ Spec refs: none (infra only, no capability requirements). Design refs: A1, A2, A
 
 Spec refs: access-control (all requirements), reply-review (score/tag DB constraints). Design refs: A6, A7, A8, A8b, A9-A14 (schema shape), A16-A20, RLS table, Interfaces/Contracts.
 
-- [ ] 2.1 Migration `*_schema.sql`: create `brands`, `profiles`, `brand_memberships`, `replies`, `reviews`, `tags`, `review_tags`, `brand_actions` with constraints/indexes from the Data Model table.
-- [ ] 2.2 Migration `*_rls.sql`: enable RLS on every table; create `is_brand_member(uuid)`, `is_team_lead()`, `shares_brand_with(uuid)` as `security definer`/`stable`/`set search_path=''`; revoke/grant execute per Interfaces/Contracts.
-- [ ] 2.3 Add policies from the RLS table for `brands`, `profiles` (A17), `brand_memberships`, `replies`, `reviews`, `review_tags` (A8), `tags`, `brand_actions` (A19).
-- [ ] 2.4 Add `REVOKE UPDATE, DELETE ON reviews, review_tags FROM authenticated, anon` (A7).
-- [ ] 2.5 Add `BEFORE INSERT` trigger on `reviews` setting `created_at = now()`, `reviewer_id = auth.uid()` (A8b).
-- [ ] 2.6 Create views `review_queue`, `brand_weekly_scores`, `brand_tag_counts`, `brand_specialist_stats` with `security_invoker = true` (A13, A14).
-- [ ] 2.7 Create `submit_review(p_reply_id, p_score, p_note, p_tag_ids uuid[])` RPC, `security invoker`, mapping `23505` to `already_reviewed` and `42501` to `forbidden` (A6).
-- [ ] 2.8 Migration `*_auth_hook.sql`: `custom_access_token_hook`, grants to `supabase_auth_admin`, `profiles`/`brand_memberships` SELECT policy for that role.
-- [ ] 2.9 Register the hook in `supabase/config.toml` (`[auth.hook.custom_access_token] enabled = true`, `uri = "pg-functions://postgres/public/custom_access_token_hook"`).
-- [ ] 2.10 Verify: `supabase db reset` applies all migrations cleanly with no seed data yet (empty DB); manually insert two throwaway users/brands via SQL and confirm `is_brand_member`/`is_team_lead` return expected booleans; confirm `UPDATE reviews` and a second `INSERT` on the same `reply_id` both fail once dummy rows exist.
+- [x] 2.1 Migration `*_schema.sql`: create `brands`, `profiles`, `brand_memberships`, `replies`, `reviews`, `tags`, `review_tags`, `brand_actions` with constraints/indexes from the Data Model table.
+- [x] 2.2 Migration `*_rls.sql`: enable RLS on every table; create `is_brand_member(uuid)`, `is_team_lead()`, `shares_brand_with(uuid)` as `security definer`/`stable`/`set search_path=''`; revoke/grant execute per Interfaces/Contracts.
+- [x] 2.3 Add policies from the RLS table for `brands`, `profiles` (A17), `brand_memberships`, `replies`, `reviews`, `review_tags` (A8), `tags`, `brand_actions` (A19).
+- [x] 2.4 Add `REVOKE UPDATE, DELETE ON reviews, review_tags FROM authenticated, anon` (A7).
+- [x] 2.5 Add `BEFORE INSERT` trigger on `reviews` setting `created_at = now()`, `reviewer_id = auth.uid()` (A8b).
+- [x] 2.6 Create views `review_queue`, `brand_weekly_scores`, `brand_tag_counts`, `brand_specialist_stats` with `security_invoker = true` (A13, A14).
+- [x] 2.7 Create `submit_review(p_reply_id, p_score, p_note, p_tag_ids uuid[])` RPC, `security invoker` (A6). Note: `23505`/`42501` mapping to `already_reviewed`/`forbidden` is deferred to the app layer (Server Action) per the orchestrator brief for this unit; the RPC itself lets SQL errors propagate.
+- [x] 2.8 Migration `*_auth_hook.sql`: `custom_access_token_hook`, grants to `supabase_auth_admin`, `profiles`/`brand_memberships` SELECT policy for that role.
+- [x] 2.9 Register the hook in `supabase/config.toml` (`[auth.hook.custom_access_token] enabled = true`, `uri = "pg-functions://postgres/public/custom_access_token_hook"`).
+- [x] 2.10 Verify: `supabase db reset` applies all migrations cleanly with no seed data yet (empty DB); manually inserted throwaway users/brands/memberships/replies via SQL and confirmed helpers, isolation, immutability, uniqueness, the A8b trigger, the A8 tag-scope guard, and the auth hook all behave per spec/design. See apply report for the full transcript.
 
 ## PR 3: Seed data
 
