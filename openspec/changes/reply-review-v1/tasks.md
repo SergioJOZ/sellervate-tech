@@ -99,15 +99,15 @@ Spec refs: identity-switcher (all requirements). Design refs: A2, A9, sequence d
 
 Spec refs: reply-review (all requirements). Design refs: A5, A6, A21, sequence diagram 2, Application Structure (`features/reviews`).
 
-- [ ] 5.1 Create `features/reviews/domain/score.ts` (1-5 integer + label) and `domain/tag-scope.ts` (documents the RLS-enforced scope rule).
-- [ ] 5.2 Create `features/reviews/ports/review-repository.ts` and `infra/supabase-review-repository.ts` (`import 'server-only'`).
-- [ ] 5.3 Create `features/reviews/application/{list-queue,get-reply,submit-review}.ts` use cases.
-- [ ] 5.4 Create `app/queue/layout.tsx` (list + brand filter, child slot) reading `review_queue` view.
-- [ ] 5.5 Create `app/queue/page.tsx` empty-selection state.
-- [ ] 5.6 Create `app/queue/[replyId]/page.tsx` (reply, `customer_message`, `ReviewForm`) and `actions.ts` calling `submitReview` -> `submit_review` RPC.
-- [ ] 5.7 Create `features/reviews/ui/{QueueList,ReplyView,ReviewForm,ConfirmSummary}.tsx` implementing the inline confirm step (Back/Confirm, "cannot be edited" notice) and "Save & next" navigation.
-- [ ] 5.8 Add `loading.tsx`/`error.tsx` for `app/queue` and `app/queue/[replyId]`, and a queue `EmptyState` ("Queue clear...").
-- [ ] 5.9 Verify: queue shows only unreviewed replies for the current lead's brands, newest first (reply-review scenario 1); brand filter narrows correctly (scenario 3); saving without a score is blocked (scenario score-required); confirm/back flow matches spec; after save the reply is gone from the queue; curl PostgREST as a specialist attempting `submit_review` returns `forbidden`; curl a second insert for an already-reviewed reply returns `already_reviewed`.
+- [x] 5.1 Create `features/reviews/domain/score.ts` (1-5 integer + label) and `domain/tag-scope.ts` (documents the RLS-enforced scope rule).
+- [x] 5.2 Create `features/reviews/ports/review-repository.ts` and `infra/supabase-review-repository.ts` (`import 'server-only'`).
+- [x] 5.3 Create `features/reviews/application/{list-queue,get-reply,submit-review}.ts` use cases.
+- [x] 5.4 Create `app/queue/layout.tsx` (list + brand filter, child slot) reading `review_queue` view.
+- [x] 5.5 Create `app/queue/page.tsx` empty-selection state.
+- [x] 5.6 Create `app/queue/[replyId]/page.tsx` (reply, `customer_message`, `ReviewForm`) and `actions.ts` calling `submitReview` -> `submit_review` RPC.
+- [x] 5.7 Create `features/reviews/ui/{QueueList,ReplyView,ReviewForm,ConfirmSummary}.tsx` implementing the inline confirm step (Back/Confirm, "cannot be edited" notice) and "Save & next" navigation.
+- [x] 5.8 Add `loading.tsx`/`error.tsx` for `app/queue` and `app/queue/[replyId]`, and a queue `EmptyState` ("Queue clear...").
+- [x] 5.9 Verify: queue shows only unreviewed replies for the current lead's brands, newest first (reply-review scenario 1); brand filter narrows correctly (scenario 3); saving without a score is blocked (scenario score-required); confirm/back flow matches spec; after save the reply is gone from the queue; curl PostgREST as a specialist attempting `submit_review` returns `forbidden`; curl a second insert for an already-reviewed reply returns `already_reviewed`.
 
 ## PR 6: Brand trend + specialist feedback
 
