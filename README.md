@@ -36,13 +36,13 @@ An internal tool for support team leads to review specialists' past replies, bra
 
 ## Switching role
 
-There is no login screen. The corner dropdown lists the five seeded users; picking one signs in for real with `signInWithPassword` (enabled by `STUB_AUTH=true`, password from `SEED_USER_PASSWORD`). Team leads land on the review queue, specialists on their own feedback.
+There is no login screen. The corner dropdown lists the five seeded users; picking one signs in for real with `signInWithPassword` (enabled by `STUB_AUTH=true`, password from `SEED_USER_PASSWORD`). Team leads land on **Review replies** (the queue) and reach each brand under **Statistics**; specialists land on **My feedback**.
 
 All seeded users share the password `reply-review-demo` (local demo only).
 
 | User  | Role       | Brands             | What to look at                                                                                                    |
 | ----- | ---------- | ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| Marta | Team lead  | Voltra, Boxwise    | The Boxwise brand page: Dani's order-history dip, the coaching marker ~4.5 weeks ago, and the recovery after it.   |
+| Marta | Team lead  | Voltra, Boxwise    | Statistics → Boxwise: Dani's order-history dip, the ① coaching action and its before → after effect.               |
 | Nuria | Team lead  | Lumé Skin          | The Lumé Skin queue and trend, including the occasional `gave_medical_advice` tag.                                 |
 | Dani  | Specialist | Voltra, Boxwise    | Only his own reviewed replies, never anyone else's.                                                                |
 | Leo   | Specialist | Boxwise, Lumé Skin | Shared between two leads: Marta reviews his Boxwise replies, Nuria his Lumé Skin ones. He sees feedback from both. |
