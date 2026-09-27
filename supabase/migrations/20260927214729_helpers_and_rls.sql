@@ -136,7 +136,9 @@ create policy review_tags_insert on public.review_tags
       select 1
       from public.reviews rv
       join public.replies r on r.id = rv.reply_id
-      left join public.tags t on t.id = review_tags.tag_id
+      -- Inner join on purpose: a tag hidden by the tags RLS (another brand) must
+      -- fail this check instead of reading as a NULL, i.e. global, brand_id.
+      join public.tags t on t.id = review_tags.tag_id
       where rv.id = review_tags.review_id
         and (t.brand_id is null or t.brand_id = r.brand_id)
     )
