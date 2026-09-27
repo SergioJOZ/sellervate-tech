@@ -5,7 +5,7 @@ import { getReplyWithTags } from "@/features/reviews/application/get-reply";
 import { listQueue } from "@/features/reviews/application/list-queue";
 import { ReplyView } from "@/features/reviews/ui/ReplyView";
 import { ReviewForm } from "@/features/reviews/ui/ReviewForm";
-import { submitReviewAction } from "./actions";
+import { createBrandTagAction, submitReviewAction } from "./actions";
 
 export default async function ReplyPage({
   params,
@@ -37,10 +37,12 @@ export default async function ReplyPage({
       <ReplyView reply={reply} />
       <ReviewForm
         replyId={reply.id}
+        brandName={reply.brandName}
         offerableTags={offerableTags}
         nextQueueReplyId={nextQueueReplyId}
         brandFilter={brandFilter}
         submitReviewAction={submitReviewAction}
+        createBrandTagAction={createBrandTagAction}
       />
     </div>
   );

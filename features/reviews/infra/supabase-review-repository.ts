@@ -2,6 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
+  CreateBrandTagResult,
   QueueReply,
   ReplyDetail,
   ReviewRepository,
@@ -98,6 +99,36 @@ export class SupabaseReviewRepository implements ReviewRepository {
 
     if (error) throw error;
     return data ?? [];
+  }
+
+  async createBrandTag(
+    brandId: string,
+    slug: string,
+    label: string,
+    description: string | null,
+  ): Promise<CreateBrandTagResult> {
+    const { data, error } = await this.supabase
+      .from("tags")
+      .insert({ brand_id: brandId, slug, label, description })
+      .select("id, brand_id, slug, label")
+      .single();
+
+    if (!error && data) {
+      return {
+        ok: true,
+        tag: {
+          id: data.id,
+          brandId: data.brand_id,
+          slug: data.slug,
+          label: data.label,
+        },
+      };
+    }
+
+    // 23505: UNIQUE (brand_id, slug); 42501: RLS `tags_insert` denial.
+    if (error?.code === "23505") return { ok: false, reason: "duplicate" };
+    if (error?.code === "42501") return { ok: false, reason: "forbidden" };
+    return { ok: false, reason: "invalid" };
   }
 
   async submitReview(

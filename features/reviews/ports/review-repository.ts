@@ -34,6 +34,12 @@ export interface SubmitReviewResult {
   message?: string;
 }
 
+export type CreateBrandTagErrorReason = "duplicate" | "forbidden" | "invalid";
+
+export type CreateBrandTagResult =
+  | { ok: true; tag: Tag }
+  | { ok: false; reason: CreateBrandTagErrorReason; message?: string };
+
 /**
  * Port for the review-loop data access. The infra adapter is built per
  * request from the user-session Supabase client (design.md, "Per-request
@@ -49,5 +55,12 @@ export interface ReviewRepository {
     note: string | null,
     tagIds: string[],
   ): Promise<SubmitReviewResult>;
+  /** Inserts a tag scoped to `brandId` (never global). */
+  createBrandTag(
+    brandId: string,
+    slug: string,
+    label: string,
+    description: string | null,
+  ): Promise<CreateBrandTagResult>;
   listLedBrands(): Promise<{ id: string; name: string; slug: string }[]>;
 }
